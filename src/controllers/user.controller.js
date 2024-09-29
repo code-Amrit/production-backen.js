@@ -3,6 +3,7 @@ import {ApiError} from '../utils/ApiError.js'
 import { User } from "../models/user.models.js"
 import { uploadOnCloudinary } from "../utils/Cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
+import { set } from "mongoose"
 
 
 
@@ -188,9 +189,31 @@ const loginUser = asyncHandler(async (req,res)=>{
 const logoutUser = asyncHandler(async(req,res) => {
     // cookies clear
     // reset refresh token from db models
-    //middle ware bana liya
+    // middleware bana liya
+    // middleware ton milya 
+    // req.user._id
+    await User.findOneAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                refreshToken: undefined
+            }
+        },
+        {
+            new: true   //jo return mn value milegi vo new wali hogi
+        }
+        )
 
+        const options = {
+            httpOnly: true,
+            secure: true
+        }
 
+        return res
+        .status(200)
+        .clearCookie("acessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(new ApiResponse(200, {}, "User logged Out"))
 
 })
 
