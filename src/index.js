@@ -7,7 +7,7 @@ import { app } from './app.js';
 
 //package json dev mn
 dotenv.config({
-    path: './env'
+    path: './.env'
 })
 
 const Port = process.env.PORT || 8000 ;
