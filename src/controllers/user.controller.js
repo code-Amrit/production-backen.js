@@ -186,7 +186,12 @@ const loginUser = asyncHandler(async (req,res)=>{
 })
 
 const logoutUser = asyncHandler(async(req,res) => {
-    
+    // cookies clear
+    // reset refresh token from db models
+    //middle ware bana liya
+
+
+
 })
 
 
@@ -194,4 +199,5 @@ const logoutUser = asyncHandler(async(req,res) => {
 export {
     registerUser,
     loginUser,
+    logoutUser
 }
