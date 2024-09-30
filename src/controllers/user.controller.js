@@ -227,7 +227,7 @@ const refreshAccessToken = asyncHandler(async(req,res) => {
     //                          || ho sakta mobile app ho to
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
 
-    if (incomingRefreshToken) {
+    if (!incomingRefreshToken) {
         throw new ApiError(401, "Unauthorized request ")
     }
 
