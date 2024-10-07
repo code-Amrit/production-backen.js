@@ -21,7 +21,7 @@ const uploadOnCloudinary = async (localFilePath)=> {
         // file has been uploaded successfully
         // console.log("file uploaded on cloudinary",response.url);
         // console.log("file uploaded on cloudinary",response);
-        fs.unlinkSync(localFilePath)
+        fs.unlinkSync(localFilePath) //delete from local
         return response;
     } catch (error) {
         fs.unlinkSync(localFilePath)  //remove the locally saved temporary file as the upload operation got failed 
@@ -30,4 +30,23 @@ const uploadOnCloudinary = async (localFilePath)=> {
 
 }
 
-export {uploadOnCloudinary}
+const deleteImageFromCloudinary = async (publicId) => {
+    try {
+
+        if (!publicId) return null;
+
+        const response = await cloudinary.uploader
+                            .destroy(publicId)
+                            .catch((err)=> console.log("Thumbnail deletion failed :",err))
+                            
+                return response
+    }catch(error){
+            console.log("Error in deleting Thumbnail",error);
+            
+            return null;
+    }
+}
+export {
+    uploadOnCloudinary,
+    deleteImageFromCloudinary
+}

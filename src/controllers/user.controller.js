@@ -3,7 +3,6 @@ import {ApiError} from '../utils/ApiError.js'
 import { User } from "../models/user.models.js"
 import { uploadOnCloudinary } from "../utils/Cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
-import { set } from "mongoose"
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose"
 
