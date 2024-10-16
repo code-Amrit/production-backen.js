@@ -1,7 +1,7 @@
 import {asyncHandler} from "../utils/asyncHandler.js"
 import {ApiError} from '../utils/ApiError.js'
 import { User } from "../models/user.models.js"
-import { uploadOnCloudinary } from "../utils/Cloudinary.js"
+import { deleteImageFromCloudinary, uploadOnCloudinary } from "../utils/Cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose"
@@ -328,7 +328,8 @@ const updateAccountDetails = asyncHandler(async(req, res)=>{
 })
 
 const updateUserAvatar = asyncHandler(async(req, res)=>{
-//todo also make delete avatar old 
+
+    //todo also make delete avatar old 
     const avatarLocalPath = req.file?.path
 
     if (!avatarLocalPath) {
@@ -339,6 +340,19 @@ const updateUserAvatar = asyncHandler(async(req, res)=>{
 
     if (!avatar.url) {
         throw new ApiError(400, "Error while uploading on avatar ")
+    }
+
+    //delete old avatar
+    if (req.user?.avatar) {
+        const userDetails = await User.findById(req.user?._id)
+
+        // extract public_id
+        const parts = userDetails.avatar.split("/");
+        const publicId = parts[parts.length - 1].split(".")[0];
+
+          // delete from cloudinary
+        await deleteImageFromCloudinary(publicId);
+
     }
 
     const user = await User.findByIdAndUpdate(
