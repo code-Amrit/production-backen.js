@@ -5,7 +5,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Tweet } from "../models/tweet.models.js";
-import mongoose, {isValidObjectId} from "mongoose"
+
 
 const toggleVideoLike = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
@@ -176,10 +176,55 @@ const getLikedVideos = asyncHandler(async (req, res) => {
 
 });
 
+const countVideoLikes = asyncHandler(async (req, res) => {
+  const { videoId } = req.params;
+
+  if (!videoId) {
+    throw new ApiError(401, "Video Id is missing from params");
+  }
+  const videoLikeCount = await Like.countDocuments({ video: videoId });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { videoLikeCount}, "Video likes count fetched successfully"));
+});
+
+const countCommentLikes = asyncHandler(async (req, res) => {
+  const { commentId } = req.params;
+
+  if (!commentId) {
+    throw new ApiError(401, "Comment Id is missing from params");
+  }
+  const commentLikeCount = await Like.countDocuments({ comment: commentId});
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {commentLikeCount}, "Comment likes count fetched successfully"));
+});
+
+const countTweetLikes = asyncHandler(async (req, res) => {
+  const { tweetId } = req.params;
+
+  if (!tweetId) {
+    throw new ApiError(401, "Tweet Id is missing from params");
+  }
+
+  const tweetLikeCount = await Like.countDocuments({ tweet: tweetId });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {tweetLikeCount}, "Tweet likes count fetched successfully"));
+});
+
+
+
 
 export {
   toggleVideoLike,
   toggleCommentLike,
   toggleTweetLike,
-  getLikedVideos
+  getLikedVideos,
+  countCommentLikes,
+  countVideoLikes,
+  countTweetLikes
 }
