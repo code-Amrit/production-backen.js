@@ -19,7 +19,11 @@ const likeSchema = new Schema(
         likedBy: {
             type: Schema.Types.ObjectId,
             ref: "User",
-        }
+        },
+        type: { 
+            type: String, 
+            enum: ['like', 'dislike'], 
+            required: true },
         
 
 
